@@ -1,0 +1,23 @@
+version: "3"
+services:
+  geomiq-mysql:
+    container_name: geomiq-mysql
+    image: mysql:5.6
+    environment:
+      MYSQL_DATABASE: "service"
+      MYSQL_ALLOW_EMPTY_PASSWORD: "true"
+    ports:
+      - "3306:3306"
+  geomiq-service:
+    container_name: geomiq-service
+    restart: always
+    build:
+      dockerfile: Dockerfile
+      context: ./
+    volumes:
+      - ./src:/var/www/service
+    ports:
+      - "80:80"
+    depends_on:
+      - geomiq-mysql
+    command: tail -f /dev/null
