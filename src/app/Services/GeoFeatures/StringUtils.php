@@ -4,6 +4,8 @@
 namespace App\Services\GeoFeatures;
 
 
+use App\Services\GeoFeatures\DTO\Values\NumericValue;
+
 class StringUtils
 {
     /**
@@ -14,8 +16,9 @@ class StringUtils
      */
     public static function sanitizeInputString(string $inputString): string
     {
-        $inputString = str_replace(' ', '', $inputString);
-        $inputString = preg_replace("![^a-z0-9_.]+!i", "-", $inputString);
+        $inputString = str_replace([' ', '%'], ['', ','], $inputString);
+        $regularWords = "([^a-z0-9_.]+)";
+        $inputString = preg_replace("!($regularWords)!i", ";", $inputString);
         return $inputString;
     }
 
@@ -36,6 +39,11 @@ class StringUtils
             if (preg_match("/[.]+/", $initialValue)) {
                 $double = (double)$initialValue;
                 return round($double, 6);
+            }
+            if (preg_match(" / [+\-] ? (?:0 | [1 - 9]\d *)(?:\.\d *)?(?:[eE][+\-] ? \d +)?/", $initialValue)) {
+                $numeric = new NumericValue();
+                $numeric->value = $initialValue;
+                return $numeric;
             }
             return (int)$initialValue;
         }

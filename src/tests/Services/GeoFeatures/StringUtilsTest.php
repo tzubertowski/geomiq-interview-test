@@ -44,12 +44,12 @@ class StringUtilsTest extends TestCase
     {
         return [
             ['foobar', 'foobar'],
-            ['foo%', 'foo-'],
-            ['foo-', 'foo-'],
-            ['foo-1.23', 'foo-1.23'],
-            ['foo=1.23', 'foo-1.23'],
-            ['foo_bar=bar', 'foo_bar-bar'],
-            ['foo_bar=1.23,ke-1=21', 'foo_bar-1.23-ke-1-21'],
+            ['foo%', 'foo;'],
+            ['foo-', 'foo;'],
+            ['foo-1.23', 'foo;1.23'],
+            ['foo=1.23', 'foo;1.23'],
+            ['foo_bar=bar', 'foo_bar;bar'],
+            ['foo_bar=1.23,ke-1=21', 'foo_bar;1.23;ke;1;21'],
             ['true', 'true']
         ];
     }
