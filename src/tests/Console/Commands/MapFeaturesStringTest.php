@@ -21,12 +21,12 @@ class MapFeaturesStringTest extends ConsoleTestCase
 
     public function testCommandIsCallable(): void
     {
-        $this->assertEquals(0, $this->artisan('features:map-to-json'));
+        $this->assertEquals(0, $this->artisan('features:map-to-json', ['input_string' => 'foo=bar']));
     }
 
     public function testCommandReturnsOutput(): void
     {
-        $sutOutput = $this->runCommand($this->sut);
-        $this->assertStringContainsString('Parsing input features string', $sutOutput->getDisplay());
+        $sutOutput = $this->runCommand($this->sut, ['input_string' => 'foo-bar']);
+        $this->assertJson($sutOutput->getDisplay());
     }
 }
