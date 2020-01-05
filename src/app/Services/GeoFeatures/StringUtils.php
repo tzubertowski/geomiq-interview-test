@@ -1,10 +1,6 @@
 <?php
 
-
 namespace App\Services\GeoFeatures;
-
-
-use App\Services\GeoFeatures\DTO\Values\NumericValue;
 
 class StringUtils
 {
@@ -40,14 +36,9 @@ class StringUtils
                 $double = (double)$initialValue;
                 return round($double, 6);
             }
-            if (preg_match(" / [+\-] ? (?:0 | [1 - 9]\d *)(?:\.\d *)?(?:[eE][+\-] ? \d +)?/", $initialValue)) {
-                $numeric = new NumericValue();
-                $numeric->value = $initialValue;
-                return $numeric;
-            }
             return (int)$initialValue;
         }
 
-        return (string)$initialValue;
+        return $initialValue;
     }
 }

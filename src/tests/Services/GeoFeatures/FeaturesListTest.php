@@ -33,9 +33,10 @@ class FeaturesListTest extends TestCase
         $sut->addValueToFeature($featureValue);
 
         $serialisedList = $sut->toArray();
-        $this->assertArrayHasKey('features', $serialisedList);
-        $this->assertArrayHasKey('length', $serialisedList);
-        $this->assertCount(1, $serialisedList['features']);
+        $this->assertArrayHasKey('data', $serialisedList);
+        $this->assertArrayHasKey('features', $serialisedList['data']);
+        $this->assertArrayHasKey('length', $serialisedList['data']);
+        $this->assertCount(1, $serialisedList['data']['features']);
     }
 
     public function testCanAddEmptyFeatureValue()

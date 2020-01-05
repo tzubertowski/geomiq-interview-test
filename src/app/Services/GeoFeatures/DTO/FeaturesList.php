@@ -20,7 +20,7 @@ class FeaturesList
                 );
                 return true;
             }
-            $this->embeddedFeatures[$featureId]['id'] = $featureId;
+            $this->embeddedFeatures[$featureId]['id'] = (string)$featureId;
             $this->embeddedFeatures[$featureId][$featureName] = $featureData;
         } catch (\LogicException $e) {
             // feature is not embedded, add to root list
@@ -42,10 +42,14 @@ class FeaturesList
     {
         $embeddedFeatures = array_map([$this, 'flattenEmbeddedFeatureValues'], $this->embeddedFeatures);
         $features = array_map([$this, 'flattenFeatureValue'], $this->features);
-        return array_merge($features, [
+        $data = array_merge($features, [
             'features' => $embeddedFeatures,
             'feature_count' => $this->getEmbeddedFeatureCount(),
         ]);
+
+        return [
+            'data' => $data,
+        ];
     }
 
     private function flattenEmbeddedFeatureValues($feature)
