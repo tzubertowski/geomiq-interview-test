@@ -31,17 +31,15 @@ class StringUtils
         if (empty($initialValue)) {
             return 0;
         }
+
         if (!preg_match("/[^0-9.]+/", $initialValue)) {
             if (preg_match("/[.]+/", $initialValue)) {
                 $double = (double)$initialValue;
                 return round($double, 6);
-            } else {
-                return (int)$initialValue;
             }
+            return (int)$initialValue;
         }
-        if ($initialValue === "true" || $initialValue === "false") {
-            return (bool)$initialValue;
-        }
+
         return (string)$initialValue;
     }
 }

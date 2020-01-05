@@ -50,6 +50,7 @@ class StringUtilsTest extends TestCase
             ['foo=1.23', 'foo-1.23'],
             ['foo_bar=bar', 'foo_bar-bar'],
             ['foo_bar=1.23,ke-1=21', 'foo_bar-1.23-ke-1-21'],
+            ['true', 'true']
         ];
     }
 }
