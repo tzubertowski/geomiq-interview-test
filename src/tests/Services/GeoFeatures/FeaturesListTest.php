@@ -5,40 +5,42 @@ namespace Tests\Services\GeoFeatures;
 
 
 use App\Services\GeoFeatures\DTO\FeaturesList;
-use Illuminate\Support\Collection;
+use App\Services\GeoFeatures\DTO\FeatureValue;
 use Tests\TestCase;
 
 class FeaturesListTest extends TestCase
 {
-    public function testSerialisesToDesiredArray()
+    public function testCountsEmbeddedFeatures()
     {
         $sut = new FeaturesList();
-        $serialisedFeaturesList = $sut->toArray();
-        $this->assertArrayHasKey('data', $serialisedFeaturesList);
-        $serialisedData = $serialisedFeaturesList['data'];
-        $this->assertArrayHasKey('features', $serialisedData);
-        $this->assertArrayHasKey('elapsed_time', $serialisedData);
-        $this->assertArrayHasKey('type', $serialisedData);
-        $this->assertArrayHasKey('feature_count', $serialisedData);
+        $embeddedFeatureValue = new FeatureValue();
+        $embeddedFeatureValue->featureData = [1, 'foobar'];
+        $sut->addValueToFeature($embeddedFeatureValue);
+        $this->assertEquals(1, $sut->getEmbeddedFeatureCount());
     }
 
-    /**
-     * @dataProvider provideFeatures
-     */
-    public function testFeatureCountComputedForTheList($features, $expectedCount)
+
+    public function testSerialisesToMultidimensionalArray()
     {
         $sut = new FeaturesList();
-        $sut->features = new Collection($features);
-        $this->assertEquals($expectedCount, $sut->toArray()['data']['feature_count']);
+        $embeddedFeatureValue = new FeatureValue();
+        $embeddedFeatureValue->featureName = 'bar';
+        $embeddedFeatureValue->featureData = [1, 'foobar'];
+        $featureValue = new FeatureValue();
+        $featureValue->featureData = ['foobar'];
+        $featureValue->featureName = 'length';
+        $sut->addValueToFeature($embeddedFeatureValue);
+        $sut->addValueToFeature($featureValue);
+
+        $serialisedList = $sut->toArray();
+        $this->assertArrayHasKey('features', $serialisedList);
+        $this->assertArrayHasKey('length', $serialisedList);
+        $this->assertCount(1, $serialisedList['features']);
     }
 
-    public function provideFeatures()
+    public function testCanAddEmptyFeatureValue()
     {
-        return [
-            [[1, 2, 3], 3],
-            [[], 0],
-            [[1], 1],
-        ];
+        $sut = new FeaturesList();
+        $this->assertTrue($sut->addValueToFeature(new FeatureValue()));
     }
-
 }
